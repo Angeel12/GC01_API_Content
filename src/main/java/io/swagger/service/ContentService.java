@@ -14,8 +14,6 @@ public class ContentService {
     @Autowired
     private ContentRepository contentRepository;
 
-
-
     public Content saveContent(Content content) {
         return contentRepository.save(content);
     }
@@ -27,6 +25,5 @@ public class ContentService {
     public Optional<Content> getContentById(Integer id) {
         return contentRepository.findById(id);
     }
-
-
+    
 }
