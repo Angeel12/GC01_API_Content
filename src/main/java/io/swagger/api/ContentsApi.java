@@ -62,6 +62,15 @@ public interface ContentsApi {
     ResponseEntity<Content> getContentById(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to retrieve", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
     );
 
+    @Operation(summary = "Delete content", description = "Delete content by its ID", tags={ "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Content deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Content not found") })
+    @RequestMapping(value = "/contents/{contentId}",
+            method = RequestMethod.DELETE)
+    ResponseEntity<Void> deleteContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to delete", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
+    );
+
 
 
 }
