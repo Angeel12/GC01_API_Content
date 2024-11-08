@@ -44,4 +44,14 @@ public interface ContentsApi {
     );
 
 
+    @Operation(summary = "Get content details", description = "Get detailed information about a specific content", tags={ "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Content details", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))),
+            @ApiResponse(responseCode = "404", description = "Content not found") })
+    @RequestMapping(value = "/contents/{contentId}",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<Content> getContentById(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to retrieve", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
+    );
+
 }
