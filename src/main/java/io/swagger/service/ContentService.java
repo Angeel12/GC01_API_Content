@@ -24,4 +24,9 @@ public class ContentService {
         return contentRepository.findAll();
     }
 
+    public Optional<Content> getContentById(Integer id) {
+        return contentRepository.findById(id);
+    }
+
+
 }
