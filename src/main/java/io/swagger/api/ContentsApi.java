@@ -4,10 +4,10 @@ import io.swagger.model.Content;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,15 +32,24 @@ public interface ContentsApi {
     ResponseEntity<Content> addContent(@Parameter(in = ParameterIn.DEFAULT, description = "The content to add", required=true, schema=@Schema()) @Valid @RequestBody Content body
     );
 
-
-    @Operation(summary = "Delete content", description = "Delete content by its ID", tags={ "contents" })
+    @Operation(summary = "Update content", description = "Update information about specific content", tags={ "contents" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Content deleted successfully"),
+            @ApiResponse(responseCode = "200", description = "Content updated successfully"),
             @ApiResponse(responseCode = "404", description = "Content not found") })
     @RequestMapping(value = "/contents/{contentId}",
-            method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to delete", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<Void> updateContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to update", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
+            , @Parameter(in = ParameterIn.DEFAULT, description = "The updated content data", required=true, schema=@Schema()) @Valid @RequestBody Content body
     );
+
+    @Operation(summary = "Get a list of all contents", description = "Retrieve a list of all contents available on the platform", tags={ "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A list of contents", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Content.class)))) })
+    @RequestMapping(value = "/contents",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Content>> getContents();
 
 
     @Operation(summary = "Get content details", description = "Get detailed information about a specific content", tags={ "contents" })
@@ -54,24 +63,5 @@ public interface ContentsApi {
     );
 
 
-    @Operation(summary = "Get a list of all contents", description = "Retrieve a list of all contents available on the platform", tags={ "contents" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A list of contents", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Content.class)))) })
-    @RequestMapping(value = "/contents",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
-    ResponseEntity<List<Content>> getContents();
-
-
-    @Operation(summary = "Update content", description = "Update information about specific content", tags={ "contents" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Content updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Content not found") })
-    @RequestMapping(value = "/contents/{contentId}",
-            consumes = { "application/json" },
-            method = RequestMethod.PUT)
-    ResponseEntity<Void> updateContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to update", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
-            , @Parameter(in = ParameterIn.DEFAULT, description = "The updated content data", required=true, schema=@Schema()) @Valid @RequestBody Content body
-    );
 
 }
