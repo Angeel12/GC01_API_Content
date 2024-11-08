@@ -47,16 +47,18 @@ public class ContentsApiController implements ContentsApi {
     }
 
     @Override
+    public ResponseEntity<List<Content>> getContents() {
+        List<Content> contents = contentService.getAllContents();
+        return new ResponseEntity<>(contents, HttpStatus.OK);
+    }
+
+
+    @Override
     public ResponseEntity<Content> getContentById(@Parameter(description = "The ID of the content to retrieve", required=true) @PathVariable("contentId") Integer contentId) {
         Optional<Content> content = contentService.getContentById(contentId);
         return content.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @Override
-    public ResponseEntity<List<Content>> getContents() {
-        List<Content> contents = contentService.getAllContents();
-        return new ResponseEntity<>(contents, HttpStatus.OK);
-    }
 
 
 }

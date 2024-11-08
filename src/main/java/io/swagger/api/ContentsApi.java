@@ -43,6 +43,14 @@ public interface ContentsApi {
             , @Parameter(in = ParameterIn.DEFAULT, description = "The updated content data", required=true, schema=@Schema()) @Valid @RequestBody Content body
     );
 
+    @Operation(summary = "Get a list of all contents", description = "Retrieve a list of all contents available on the platform", tags={ "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A list of contents", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Content.class)))) })
+    @RequestMapping(value = "/contents",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Content>> getContents();
+
 
     @Operation(summary = "Get content details", description = "Get detailed information about a specific content", tags={ "contents" })
     @ApiResponses(value = {
@@ -54,12 +62,6 @@ public interface ContentsApi {
     ResponseEntity<Content> getContentById(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to retrieve", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
     );
 
-    @Operation(summary = "Get a list of all contents", description = "Retrieve a list of all contents available on the platform", tags={ "contents" })
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "A list of contents", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Content.class)))) })
-    @RequestMapping(value = "/contents",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
-    ResponseEntity<List<Content>> getContents();
+
 
 }
