@@ -46,5 +46,10 @@ public class ContentsApiController implements ContentsApi {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Content> getContentById(@Parameter(description = "The ID of the content to retrieve", required=true) @PathVariable("contentId") Integer contentId) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
 
 }
