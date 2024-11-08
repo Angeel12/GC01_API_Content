@@ -20,4 +20,8 @@ public class ContentService {
         return contentRepository.save(content);
     }
 
+    public List<Content> getAllContents() {
+        return contentRepository.findAll();
+    }
+
 }

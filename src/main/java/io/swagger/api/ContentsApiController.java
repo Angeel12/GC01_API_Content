@@ -51,5 +51,11 @@ public class ContentsApiController implements ContentsApi {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    @Override
+    public ResponseEntity<List<Content>> getContents() {
+        List<Content> contents = contentService.getAllContents();
+        return new ResponseEntity<>(contents, HttpStatus.OK);
+    }
+
 
 }
