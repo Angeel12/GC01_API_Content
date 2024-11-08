@@ -32,5 +32,16 @@ public interface ContentsApi {
     ResponseEntity<Content> addContent(@Parameter(in = ParameterIn.DEFAULT, description = "The content to add", required=true, schema=@Schema()) @Valid @RequestBody Content body
     );
 
+    @Operation(summary = "Update content", description = "Update information about specific content", tags={ "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Content updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Content not found") })
+    @RequestMapping(value = "/contents/{contentId}",
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<Void> updateContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to update", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
+            , @Parameter(in = ParameterIn.DEFAULT, description = "The updated content data", required=true, schema=@Schema()) @Valid @RequestBody Content body
+    );
+
 
 }
