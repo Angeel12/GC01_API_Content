@@ -59,6 +59,11 @@ public class ContentsApiController implements ContentsApi {
         return content.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Override
+    public ResponseEntity<Void> deleteContent(@Parameter(description = "The ID of the content to delete", required=true) @PathVariable("contentId") Integer contentId) {
+        contentService.deleteContent(contentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 
 }

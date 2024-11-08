@@ -25,5 +25,10 @@ public class ContentService {
     public Optional<Content> getContentById(Integer id) {
         return contentRepository.findById(id);
     }
-    
+
+    public void deleteContent(Integer id) {
+        contentRepository.deleteById(id);
+    }
+
+
 }
