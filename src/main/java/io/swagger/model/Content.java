@@ -8,8 +8,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Content
@@ -110,22 +112,24 @@ public class Content {
   }
 
   public enum GenreType {
-    ACTION("action"),
-    COMEDY("comedy"),
-    DRAMA("drama"),
-    HORROR("horror"),
-    THRILLER("thriller"),
-    ROMANCE("romance"),
-    SCI_FI("sci-fi"),
-    FANTASY("fantasy"),
-    DOCUMENTARY("documentary"),
-    ANIMATION("animation");
+    action("action"),
+    comedy("comedy"),
+    drama("drama"),
+    horror("horror"),
+    thriller("thriller"),
+    romance("romance"),
+    sci_fi("sci-fi"),
+    fantasy("fantasy"),
+    documentary("documentary"),
+    animation("animation");
 
     private final String valueGenre;
 
     GenreType(String value) {
       this.valueGenre = value;
     }
+
+
 
     public static boolean isValid(String genre) {
       for (GenreType g : GenreType.values()) {
@@ -135,6 +139,14 @@ public class Content {
       }
       return false;
     }
+  }
+
+  public static List<String> getAllGenres() {
+    List<String> genres = new ArrayList<>();
+    for (Content.GenreType genre : Content.GenreType.values()) {
+      genres.add(genre.name());
+    }
+    return genres;
   }
 
   public enum LanguageType {

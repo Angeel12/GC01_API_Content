@@ -86,5 +86,15 @@ public class ContentsApiController implements ContentsApi {
         return ResponseEntity.ok(contents);
     }
 
+    @Override
+    public ResponseEntity<List<String>> getAllGenres() {
+        List<String> genres = contentService.getAllGenres();
+        if (genres.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(genres);
+    }
+
+
 
 }

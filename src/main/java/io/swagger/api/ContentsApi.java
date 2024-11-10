@@ -97,7 +97,15 @@ public interface ContentsApi {
             method = RequestMethod.GET)
     ResponseEntity<List<Content>> filterContentsByGenres(@Parameter(description = "List of genres to filter by", required = true, schema = @Schema()) @RequestParam List<String> genres);
 
-
+    @Operation(summary = "Retrieve all available genres", description = "Get a list of all genres available on the platform", tags = { "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A list of all available genres", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "204", description = "No genres found")
+    })
+    @RequestMapping(value = "/contents/genres",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<String>> getAllGenres();
 
 
 }
