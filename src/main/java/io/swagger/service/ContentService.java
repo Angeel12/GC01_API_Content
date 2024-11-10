@@ -30,5 +30,9 @@ public class ContentService {
         contentRepository.deleteById(id);
     }
 
+    public List<Content> searchContentByKeyword(String keyword) {
+        return contentRepository.searchByKeyword(keyword);
+    }
+
 
 }

@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -70,6 +67,25 @@ public interface ContentsApi {
             method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to delete", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
     );
+
+    @Operation(summary = "Search contents by keyword",
+            description = "Search contents using a single keyword that matches title, synopsis, actor names, or director names",
+            tags = { "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "List of contents matching the keyword",
+                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Content.class)))
+    })
+    @RequestMapping(value = "/contents/search",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Content>> searchContents(
+            @Parameter(in = ParameterIn.QUERY,
+                    description = "Keyword to search across title, synopsis, actor names, or director names",
+                    required = true,
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(type = "string"))
+            @RequestParam String keyword);
 
 
 
