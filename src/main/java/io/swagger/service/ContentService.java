@@ -34,5 +34,9 @@ public class ContentService {
         return contentRepository.searchByKeyword(keyword);
     }
 
+    public List<Content> getContentsByGenres(List<String> genres) {
+        return contentRepository.findByGenres(genres);
+    }
+
 
 }
