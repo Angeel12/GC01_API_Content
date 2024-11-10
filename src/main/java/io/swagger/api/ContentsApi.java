@@ -87,6 +87,17 @@ public interface ContentsApi {
                     schema = @io.swagger.v3.oas.annotations.media.Schema(type = "string"))
             @RequestParam String keyword);
 
+    @Operation(summary = "Filter contents by genres", description = "Retrieve contents filtered by one or more genres", tags={ "contents" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A list of contents matching the genres", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Content.class)))),
+            @ApiResponse(responseCode = "204", description = "No content found for the specified genres")
+    })
+    @RequestMapping(value = "/contents/filterByGenres",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Content>> filterContentsByGenres(@Parameter(description = "List of genres to filter by", required = true, schema = @Schema()) @RequestParam List<String> genres);
+
+
 
 
 }

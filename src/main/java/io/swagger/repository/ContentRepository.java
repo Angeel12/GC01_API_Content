@@ -22,4 +22,7 @@ public interface ContentRepository extends JpaRepository<Content, Integer> {
             "AND c.status = 'public'",
             nativeQuery = true)
     List<Content> searchByKeyword(@Param("keyword") String keyword);
+
+    @Query("SELECT c FROM Content c WHERE c.genre IN :genres")
+    List<Content> findByGenres(@Param("genres") List<String> genres);
 }

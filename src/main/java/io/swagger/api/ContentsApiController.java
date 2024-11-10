@@ -77,4 +77,14 @@ public class ContentsApiController implements ContentsApi {
         return ResponseEntity.ok(results);
     }
 
+    @Override
+    public ResponseEntity<List<Content>> filterContentsByGenres(@RequestParam List<String> genres) {
+        List<Content> contents = contentService.getContentsByGenres(genres);
+        if (contents.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(contents);
+    }
+
+
 }
