@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +58,11 @@ public class ContentsApiController implements ContentsApi {
     @Override
     public ResponseEntity<Content> getContentById(@Parameter(description = "The ID of the content to retrieve", required=true) @PathVariable("contentId") Integer contentId) {
         Optional<Content> content = contentService.getContentById(contentId);
-        return content.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (content.isPresent()) {
+            return ResponseEntity.ok(content.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override
@@ -65,5 +71,10 @@ public class ContentsApiController implements ContentsApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Override
+    public ResponseEntity<List<Content>> searchContents(@RequestParam String keyword) {
+        List<Content> results = contentService.searchContentByKeyword(keyword);
+        return ResponseEntity.ok(results);
+    }
 
 }
