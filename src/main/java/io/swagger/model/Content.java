@@ -81,6 +81,11 @@ public class Content {
   @JsonProperty("language")
   private String language;
 
+  @Column (name = "status")
+  @JsonProperty("status")
+  private String status;
+
+
   // Enums de validación para type, genre y language
   public enum ContentType {
     MOVIE("movie"),
@@ -88,15 +93,15 @@ public class Content {
     EPISODE("episode"),
     DOCUMENTARY("documentary");
 
-    private final String value;
+    private final String valueType;
 
     ContentType(String value) {
-      this.value = value;
+      this.valueType = value;
     }
 
     public static boolean isValid(String type) {
       for (ContentType t : ContentType.values()) {
-        if (t.value.equalsIgnoreCase(type)) {
+        if (t.valueType.equalsIgnoreCase(type)) {
           return true;
         }
       }
@@ -116,15 +121,15 @@ public class Content {
     DOCUMENTARY("documentary"),
     ANIMATION("animation");
 
-    private final String value;
+    private final String valueGenre;
 
     GenreType(String value) {
-      this.value = value;
+      this.valueGenre = value;
     }
 
     public static boolean isValid(String genre) {
       for (GenreType g : GenreType.values()) {
-        if (g.value.equalsIgnoreCase(genre)) {
+        if (g.valueGenre.equalsIgnoreCase(genre)) {
           return true;
         }
       }
@@ -144,21 +149,54 @@ public class Content {
     ARABIC("arabic"),
     RUSSIAN("russian");
 
-    private final String value;
+    private final String valueLanguage;
 
     LanguageType(String value) {
-      this.value = value;
+      this.valueLanguage = value;
     }
 
     public static boolean isValid(String language) {
       for (LanguageType l : LanguageType.values()) {
-        if (l.value.equalsIgnoreCase(language)) {
+        if (l.valueLanguage.equalsIgnoreCase(language)) {
           return true;
         }
       }
       return false;
     }
   }
+
+  public enum StatusType {
+    PUBLIC("public"),
+    PRIVATE("private"),
+    UNLISTED("unlisted");
+
+    private final String valueStatus;
+
+    StatusType(String value) {
+      this.valueStatus = value;
+    }
+
+    public static boolean isValid(String status) {
+      for (StatusType s : StatusType.values()) {
+        if (s.valueStatus.equalsIgnoreCase(status)) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        if (StatusType.isValid(status)) {
+            this.status = status;
+        } else {
+            throw new IllegalArgumentException("Invalid status: " + status);
+        }
+    }
 
   // Métodos de validación para type, genre y language
   public String getType() {
@@ -313,6 +351,7 @@ public class Content {
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    actorIds: ").append(toIndentedString(actorIds)).append("\n");
     sb.append("    directorIds: ").append(toIndentedString(directorIds)).append("\n");
+    sb.append("status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();
   }
