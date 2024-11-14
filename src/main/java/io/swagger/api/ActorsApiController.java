@@ -62,9 +62,14 @@ public class ActorsApiController implements ActorsApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateActor(@Parameter(description = "The ID of the actor to update", required=true) @PathVariable("actorId") Integer actorId, @Parameter(description = "The updated actor data", required=true) @Valid @RequestBody Actor body) {
+    public ResponseEntity<Actor> updateActor(@PathVariable("actorId") Integer actorId, @Valid @RequestBody Actor body) {
         body.setId(actorId);
-        actorService.saveActor(body);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Actor> existingActor = actorService.getActorById(actorId);
+        if (existingActor.isPresent()) {
+            Actor updatedActor = actorService.saveActor(body);
+            return ResponseEntity.ok(updatedActor);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

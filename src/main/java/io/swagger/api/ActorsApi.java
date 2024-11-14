@@ -72,16 +72,16 @@ public interface ActorsApi {
 
 
     @Operation(summary = "Update actor", description = "Update information about a specific actor", tags={ "actors" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Actor updated successfully"),
-        
-        @ApiResponse(responseCode = "404", description = "Actor not found") })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Actor updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Actor.class))),
+            @ApiResponse(responseCode = "404", description = "Actor not found") })
     @RequestMapping(value = "/actors/{actorId}",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> updateActor(@Parameter(in = ParameterIn.PATH, description = "The ID of the actor to update", required=true, schema=@Schema()) @PathVariable("actorId") Integer actorId
-, @Parameter(in = ParameterIn.DEFAULT, description = "The updated actor data", required=true, schema=@Schema()) @Valid @RequestBody Actor body
-);
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<Actor> updateActor(
+            @Parameter(in = ParameterIn.PATH, description = "The ID of the actor to update", required=true, schema=@Schema()) @PathVariable("actorId") Integer actorId,
+            @Parameter(in = ParameterIn.DEFAULT, description = "The updated actor data", required=true, schema=@Schema()) @Valid @RequestBody Actor body
+    );
 
 }
 
