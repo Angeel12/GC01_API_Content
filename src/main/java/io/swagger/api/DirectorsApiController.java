@@ -48,7 +48,11 @@ public class DirectorsApiController implements DirectorsApi {
     @Override
     public ResponseEntity<Director> getDirectorById(@Parameter(description = "The ID of the director to retrieve", required=true) @PathVariable("directorId") Integer directorId) {
         Optional<Director> director = directorService.getDirectorById(directorId);
-        return director.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (director.isPresent()) {
+            return ResponseEntity.ok(director.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override
@@ -58,9 +62,14 @@ public class DirectorsApiController implements DirectorsApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateDirector(@Parameter(description = "The ID of the director to update", required=true) @PathVariable("directorId") Integer directorId, @Parameter(description = "The updated director data", required=true) @Valid @RequestBody Director body) {
+    public ResponseEntity<Director> updateDirector(@Parameter(description = "The ID of the director to update", required=true) @PathVariable("directorId") Integer directorId, @Parameter(description = "The updated director data", required=true) @Valid @RequestBody Director body) {
         body.setId(directorId);
-        directorService.saveDirector(body);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Director> existingDirector = directorService.getDirectorById(directorId);
+        if (existingDirector.isPresent()) {
+            Director updatedDirector = directorService.saveDirector(body);
+            return ResponseEntity.ok(updatedDirector);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
