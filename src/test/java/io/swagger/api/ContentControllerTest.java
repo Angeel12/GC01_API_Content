@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -202,6 +203,20 @@ public class ContentControllerTest {
                 .andExpect(jsonPath("$.title").value("Inception: The Update")) // Verificamos el título actualizado
                 .andExpect(jsonPath("$.synopsis").value("An updated mind-bending thriller")) // Verificamos la sinopsis actualizada
                 .andExpect(jsonPath("$.duration").value(150)); // Verificamos la duración actualizada
+    }
+
+
+    @Test
+    public void testDeleteContent() throws Exception {
+        // Configuramos el comportamiento simulado del servicio para eliminar un contenido
+        // No es necesario devolver nada, solo verificar que el método de servicio fue llamado
+
+        // Realizamos la prueba del endpoint DELETE
+        mockMvc.perform(delete("/contents/1"))
+                .andExpect(status().isNoContent()); // Verificamos que se devuelve el código 204 No Content
+
+        // Verificamos que el servicio haya sido llamado para eliminar el contenido con ID 1
+        verify(contentService).deleteContent(1);
     }
 
 
