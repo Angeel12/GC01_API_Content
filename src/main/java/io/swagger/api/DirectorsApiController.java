@@ -48,7 +48,11 @@ public class DirectorsApiController implements DirectorsApi {
     @Override
     public ResponseEntity<Director> getDirectorById(@Parameter(description = "The ID of the director to retrieve", required=true) @PathVariable("directorId") Integer directorId) {
         Optional<Director> director = directorService.getDirectorById(directorId);
-        return director.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (director.isPresent()) {
+            return ResponseEntity.ok(director.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override

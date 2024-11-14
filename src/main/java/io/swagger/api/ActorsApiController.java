@@ -48,7 +48,11 @@ public class ActorsApiController implements ActorsApi {
     @Override
     public ResponseEntity<Actor> getActorById(@Parameter(description = "The ID of the actor to retrieve", required=true) @PathVariable("actorId") Integer actorId) {
         Optional<Actor> actor = actorService.getActorById(actorId);
-        return actor.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (actor.isPresent()) {
+            return ResponseEntity.ok(actor.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override
