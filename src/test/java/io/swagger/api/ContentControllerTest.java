@@ -219,6 +219,52 @@ public class ContentControllerTest {
         verify(contentService).deleteContent(1);
     }
 
+    @Test
+    public void testUpdateContentStatus() throws Exception {
+        // Configuramos un objeto de tipo Content existente
+        Content existingContent = new Content();
+        existingContent.setId(1);
+        existingContent.setType("movie");
+        existingContent.setTitle("Inception");
+        existingContent.setSynopsis("A mind-bending thriller");
+        existingContent.setReleaseYear(2010);
+        existingContent.setDuration(148);
+        existingContent.setCoverImage("inception.jpg");
+        existingContent.setGenre("action");
+        existingContent.setActorIds(Arrays.asList(101, 102));
+        existingContent.setDirectorIds(Arrays.asList(201));
+        existingContent.setLanguage("English");
+        existingContent.setStatus("public");
+
+        // Configuramos el contenido actualizado con un nuevo estado
+        Content updatedContent = new Content();
+        updatedContent.setId(1);
+        updatedContent.setType("movie");
+        updatedContent.setTitle("Inception");
+        updatedContent.setSynopsis("A mind-bending thriller");
+        updatedContent.setReleaseYear(2010);
+        updatedContent.setDuration(148);
+        updatedContent.setCoverImage("inception.jpg");
+        updatedContent.setGenre("action");
+        updatedContent.setActorIds(Arrays.asList(101, 102));
+        updatedContent.setDirectorIds(Arrays.asList(201));
+        updatedContent.setLanguage("English");
+        updatedContent.setStatus("private"); // Cambio de estado
+
+        // Configuramos el comportamiento del servicio para devolver el contenido existente y el actualizado
+        when(contentService.getContentById(1)).thenReturn(Optional.of(existingContent));
+        when(contentService.saveContent(updatedContent)).thenReturn(updatedContent);
+
+        // Realizamos la prueba del endpoint PUT para actualizar el estado
+        ObjectMapper objectMapper = new ObjectMapper();
+        mockMvc.perform(put("/contents/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedContent)))
+                .andExpect(status().isOk()) // Verificamos que se devuelve el código 200 OK
+                .andExpect(jsonPath("$.status").value("private")); // Verificamos que el estado fue actualizado correctamente
+    }
+
+
 
 
 
