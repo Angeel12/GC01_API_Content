@@ -287,6 +287,28 @@ public class ContentControllerTest {
                 .andExpect(jsonPath("$[0].synopsis").value("A mind-bending thriller"));
     }
 
+    @Test
+    public void testFilterContentsByGenres() throws Exception {
+        // Palabras clave de géneros a filtrar
+        List<String> genresToFilter = Arrays.asList("action", "documentary");
+
+        // Filtramos el contenido simulado por género
+        List<Content> filteredContents = mockContents.stream()
+                .filter(content -> genresToFilter.contains(content.getGenre()))
+                .collect(Collectors.toList());
+
+        // Configuramos el servicio para devolver los contenidos filtrados
+        when(contentService.getContentsByGenres(genresToFilter)).thenReturn(filteredContents);
+
+        // Realizamos la prueba del endpoint
+        mockMvc.perform(get("/contents/filterByGenres")
+                        .param("genres", "action", "documentary")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()) // Verificamos que el código de respuesta es 200 OK
+                .andExpect(jsonPath("$.length()").value(filteredContents.size())) // Verificamos el número de elementos en la respuesta
+                .andExpect(jsonPath("$[0].genre").value("action")) // Verificamos el género del primer contenido devuelto
+                .andExpect(jsonPath("$[1].genre").value("documentary")); // Verificamos el género del segundo contenido devuelto
+    }
 
 
 
