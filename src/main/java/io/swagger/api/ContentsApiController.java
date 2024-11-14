@@ -42,10 +42,15 @@ public class ContentsApiController implements ContentsApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateContent(@Parameter(description = "The ID of the content to update", required=true) @PathVariable("contentId") Integer contentId, @Parameter(description = "The updated content data", required=true) @Valid @RequestBody Content body) {
+    public ResponseEntity<Content> updateContent(@Parameter(description = "The ID of the content to update", required = true) @PathVariable("contentId") Integer contentId, @Parameter(description = "The updated content data", required = true) @Valid @RequestBody Content body) {
         body.setId(contentId);
-        contentService.saveContent(body);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Content> existingContent = contentService.getContentById(contentId);
+        if (existingContent.isPresent()) {
+            Content updatedContent = contentService.saveContent(body);
+            return ResponseEntity.ok(updatedContent);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override
