@@ -72,16 +72,16 @@ public interface DirectorsApi {
 
 
     @Operation(summary = "Update director", description = "Update information about a specific director", tags={ "directors" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Director updated successfully"),
-        
-        @ApiResponse(responseCode = "404", description = "Director not found") })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Director updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Director.class))),
+            @ApiResponse(responseCode = "404", description = "Director not found") })
     @RequestMapping(value = "/directors/{directorId}",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> updateDirector(@Parameter(in = ParameterIn.PATH, description = "The ID of the director to update", required=true, schema=@Schema()) @PathVariable("directorId") Integer directorId
-, @Parameter(in = ParameterIn.DEFAULT, description = "The updated director data", required=true, schema=@Schema()) @Valid @RequestBody Director body
-);
+            consumes = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity<Director> updateDirector(
+            @Parameter(in = ParameterIn.PATH, description = "The ID of the director to update", required=true, schema=@Schema()) @PathVariable("directorId") Integer directorId,
+            @Parameter(in = ParameterIn.DEFAULT, description = "The updated director data", required=true, schema=@Schema()) @Valid @RequestBody Director body
+    );
 
 }
 
