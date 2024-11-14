@@ -1,8 +1,7 @@
 package io.swagger.api;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -156,4 +155,56 @@ public class ContentControllerTest {
                         .content(objectMapper.writeValueAsString(newContent)))
                 .andExpect(status().isCreated()); // Verificamos que se devuelve el código 201 Created
     }
+
+
+    @Test
+    public void testUpdateContent() throws Exception {
+        // Configuramos un objeto de tipo Content existente
+        Content existingContent = new Content();
+        existingContent.setId(1);
+        existingContent.setType("movie");
+        existingContent.setTitle("Inception");
+        existingContent.setSynopsis("A mind-bending thriller");
+        existingContent.setReleaseYear(2010);
+        existingContent.setDuration(148);
+        existingContent.setCoverImage("inception.jpg");
+        existingContent.setGenre("action");
+        existingContent.setActorIds(Arrays.asList(101, 102));
+        existingContent.setDirectorIds(Arrays.asList(201));
+        existingContent.setLanguage("English");
+        existingContent.setStatus("public");
+
+        // Configuramos el contenido actualizado
+        Content updatedContent = new Content();
+        updatedContent.setId(1);
+        updatedContent.setType("movie");
+        updatedContent.setTitle("Inception: The Update");
+        updatedContent.setSynopsis("An updated mind-bending thriller");
+        updatedContent.setReleaseYear(2010);
+        updatedContent.setDuration(150);
+        updatedContent.setCoverImage("inception_updated.jpg");
+        updatedContent.setGenre("action");
+        updatedContent.setActorIds(Arrays.asList(101, 103));
+        updatedContent.setDirectorIds(Arrays.asList(201));
+        updatedContent.setLanguage("English");
+        updatedContent.setStatus("public");
+
+        // Configuramos el comportamiento del servicio para devolver el contenido existente y el actualizado
+        when(contentService.getContentById(1)).thenReturn(Optional.of(existingContent));
+        when(contentService.saveContent(updatedContent)).thenReturn(updatedContent);
+
+        // Realizamos la prueba del endpoint PUT
+        ObjectMapper objectMapper=new ObjectMapper();
+        mockMvc.perform(put("/contents/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedContent)))
+                .andExpect(status().isOk()) // Verificamos que se devuelve el código 200 OK
+                .andExpect(jsonPath("$.title").value("Inception: The Update")) // Verificamos el título actualizado
+                .andExpect(jsonPath("$.synopsis").value("An updated mind-bending thriller")) // Verificamos la sinopsis actualizada
+                .andExpect(jsonPath("$.duration").value(150)); // Verificamos la duración actualizada
+    }
+
+
+
+
 }
