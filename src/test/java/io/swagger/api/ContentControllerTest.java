@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.Content;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import io.swagger.service.ContentService;
 
@@ -125,5 +128,32 @@ public class ContentControllerTest {
         // Prueba el endpoint para un contenido que no existe
         mockMvc.perform(get("/contents/999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCreateContent() throws Exception {
+        // Configuramos un nuevo objeto de tipo Content para añadir
+        Content newContent = new Content();
+        newContent.setType("movie");
+        newContent.setTitle("Interstellar");
+        newContent.setSynopsis("A journey through space and time.");
+        newContent.setReleaseYear(2014);
+        newContent.setDuration(169);
+        newContent.setCoverImage("interstellar.jpg");
+        newContent.setGenre("sci-fi");
+        newContent.setActorIds(Arrays.asList(201, 202));
+        newContent.setDirectorIds(Arrays.asList(301));
+        newContent.setLanguage("English");
+        newContent.setStatus("public");
+
+        // Configuramos el servicio para que devuelva el contenido que hemos añadido
+        when(contentService.saveContent(newContent)).thenReturn(newContent);
+
+        // Realizamos la prueba del endpoint POST
+        ObjectMapper objectMapper = new ObjectMapper();
+        mockMvc.perform(post("/contents")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newContent)))
+                .andExpect(status().isCreated()); // Verificamos que se devuelve el código 201 Created
     }
 }
