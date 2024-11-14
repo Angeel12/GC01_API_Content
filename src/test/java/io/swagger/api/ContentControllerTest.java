@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,6 +23,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import io.swagger.service.ContentService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -310,6 +313,17 @@ public class ContentControllerTest {
                 .andExpect(jsonPath("$[1].genre").value("documentary")); // Verificamos el género del segundo contenido devuelto
     }
 
+    @Test
+    public void testGetAllGenres_ReturnsGenres() throws Exception {
+        // Simulando una respuesta del servicio con una lista de géneros
+        given(contentService.getAllGenres()).willReturn(
+                Arrays.asList("action", "comedy", "drama", "horror", "thriller", "romance", "sci-fi", "fantasy", "documentary", "animation")
+        );
 
+        mockMvc.perform(get("/contents/genres"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json"))
+                .andExpect(content().json("[\"action\", \"comedy\", \"drama\", \"horror\", \"thriller\", \"romance\", \"sci-fi\", \"fantasy\", \"documentary\", \"animation\"]"));
+    }
 
 }
