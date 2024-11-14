@@ -31,15 +31,16 @@ public interface ContentsApi {
 
     @Operation(summary = "Update content", description = "Update information about specific content", tags={ "contents" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Content updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Content not found") })
+            @ApiResponse(responseCode = "200", description = "Content updated successfully", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = io.swagger.model.Content.class))),
+            @ApiResponse(responseCode = "404", description = "Content not found")
+    })
     @RequestMapping(value = "/contents/{contentId}",
             consumes = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity<Void> updateContent(@Parameter(in = ParameterIn.PATH, description = "The ID of the content to update", required=true, schema=@Schema()) @PathVariable("contentId") Integer contentId
-            , @Parameter(in = ParameterIn.DEFAULT, description = "The updated content data", required=true, schema=@Schema()) @Valid @RequestBody Content body
+    ResponseEntity<Content> updateContent(
+            @Parameter(in = ParameterIn.PATH, description = "The ID of the content to update", required = true, schema = @Schema()) @PathVariable("contentId") Integer contentId,
+            @Parameter(in = ParameterIn.DEFAULT, description = "The updated content data", required = true, schema = @Schema()) @Valid @RequestBody Content body
     );
-
     @Operation(summary = "Get a list of all contents", description = "Retrieve a list of all contents available on the platform", tags={ "contents" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "A list of contents", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Content.class)))) })

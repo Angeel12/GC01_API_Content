@@ -62,9 +62,14 @@ public class DirectorsApiController implements DirectorsApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateDirector(@Parameter(description = "The ID of the director to update", required=true) @PathVariable("directorId") Integer directorId, @Parameter(description = "The updated director data", required=true) @Valid @RequestBody Director body) {
+    public ResponseEntity<Director> updateDirector(@Parameter(description = "The ID of the director to update", required=true) @PathVariable("directorId") Integer directorId, @Parameter(description = "The updated director data", required=true) @Valid @RequestBody Director body) {
         body.setId(directorId);
-        directorService.saveDirector(body);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Director> existingDirector = directorService.getDirectorById(directorId);
+        if (existingDirector.isPresent()) {
+            Director updatedDirector = directorService.saveDirector(body);
+            return ResponseEntity.ok(updatedDirector);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

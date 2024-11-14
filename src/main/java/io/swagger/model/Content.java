@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @Table(name = "content")
 public class Content {
 
+
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
