@@ -1,273 +1,19 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
   title: Movie Streaming API
-  description: API for managing content (movies, series, and episodes) on a streaming platform.
+  description: API for managing content (movies, series, and episodes) on a streaming
+    platform.
+  termsOfService: ""
+  contact:
+    email: ""
+  license:
+    name: ""
+    url: http://unlicense.org
   version: 1.0.0
 servers:
-  - url: https://api.moviestreaming.com/v1
-    description: Main server
-
-tags:
-  - name: contents
-    description: Operations related to content (movies and series)
-  - name: actors
-    description: Operations related to actors
-  - name: directors
-    description: Operations related to directors
-
+  - url: http://localhost:8081/v1
+    description: Generated server url
 paths:
-  /contents:
-    get:
-      tags:
-        - contents
-      summary: Get a list of all contents
-      description: Retrieve a list of all contents available on the platform
-      operationId: getContents
-      responses:
-        '200':
-          description: A list of contents
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Content'
-
-    post:
-      tags:
-        - contents
-      summary: Add new content
-      description: Add new content to the platform
-      operationId: addContent
-      requestBody:
-        description: The content to add
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Content'
-      responses:
-        '201':
-          description: Content added successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Content'
-
-  /contents/{contentId}:
-    get:
-      tags:
-        - contents
-      summary: Get content details
-      description: Get detailed information about a specific content
-      operationId: getContentById
-      parameters:
-        - name: contentId
-          in: path
-          required: true
-          description: The ID of the content to retrieve
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Content details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Content'
-        '404':
-          description: Content not found
-
-    put:
-      tags:
-        - contents
-      summary: Update content
-      description: Update information about specific content
-      operationId: updateContent
-      parameters:
-        - name: contentId
-          in: path
-          required: true
-          description: The ID of the content to update
-          schema:
-            type: integer
-      requestBody:
-        description: The updated content data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Content'
-      responses:
-        '200':
-          description: Content updated successfully
-        '404':
-          description: Content not found
-
-    delete:
-      tags:
-        - contents
-      summary: Delete content
-      description: Delete content by its ID
-      operationId: deleteContent
-      parameters:
-        - name: contentId
-          in: path
-          required: true
-          description: The ID of the content to delete
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: Content deleted successfully
-        '404':
-          description: Content not found
-
-  /actors:
-    get:
-      tags:
-        - actors
-      summary: Get a list of all actors
-      description: Retrieve a list of all actors available in the platform
-      operationId: getActors
-      responses:
-        '200':
-          description: A list of actors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Actor'
-
-    post:
-      tags:
-        - actors
-      summary: Add a new actor
-      description: Add a new actor to the platform
-      operationId: addActor
-      requestBody:
-        description: The actor to add
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Actor'
-      responses:
-        '201':
-          description: Actor added successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Actor'
-
-  /actors/{actorId}:
-    get:
-      tags:
-        - actors
-      summary: Get actor details
-      description: Get detailed information about a specific actor
-      operationId: getActorById
-      parameters:
-        - name: actorId
-          in: path
-          required: true
-          description: The ID of the actor to retrieve
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Actor details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Actor'
-        '404':
-          description: Actor not found
-
-    put:
-      tags:
-        - actors
-      summary: Update actor
-      description: Update information about a specific actor
-      operationId: updateActor
-      parameters:
-        - name: actorId
-          in: path
-          required: true
-          description: The ID of the actor to update
-          schema:
-            type: integer
-      requestBody:
-        description: The updated actor data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Actor'
-      responses:
-        '200':
-          description: Actor updated successfully
-        '404':
-          description: Actor not found
-
-    delete:
-      tags:
-        - actors
-      summary: Delete actor
-      description: Delete actor by its ID
-      operationId: deleteActor
-      parameters:
-        - name: actorId
-          in: path
-          required: true
-          description: The ID of the actor to delete
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: Actor deleted successfully
-        '404':
-          description: Actor not found
-
-  /directors:
-    get:
-      tags:
-        - directors
-      summary: Get a list of all directors
-      description: Retrieve a list of all directors available in the platform
-      operationId: getDirectors
-      responses:
-        '200':
-          description: A list of directors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Director'
-
-    post:
-      tags:
-        - directors
-      summary: Add a new director
-      description: Add a new director to the platform
-      operationId: addDirector
-      requestBody:
-        description: The director to add
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Director'
-      responses:
-        '201':
-          description: Director added successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Director'
-
   /directors/{directorId}:
     get:
       tags:
@@ -278,20 +24,24 @@ paths:
       parameters:
         - name: directorId
           in: path
-          required: true
           description: The ID of the director to retrieve
+          required: true
           schema:
             type: integer
+            format: int32
       responses:
-        '200':
+        404:
+          description: Director not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Director'
+        200:
           description: Director details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Director'
-        '404':
-          description: Director not found
-
     put:
       tags:
         - directors
@@ -301,23 +51,30 @@ paths:
       parameters:
         - name: directorId
           in: path
-          required: true
           description: The ID of the director to update
+          required: true
           schema:
             type: integer
+            format: int32
       requestBody:
-        description: The updated director data
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Director'
+        required: true
       responses:
-        '200':
-          description: Director updated successfully
-        '404':
+        404:
           description: Director not found
-
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Director'
+        200:
+          description: Director updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Director'
     delete:
       tags:
         - directors
@@ -327,119 +84,433 @@ paths:
       parameters:
         - name: directorId
           in: path
-          required: true
           description: The ID of the director to delete
+          required: true
           schema:
             type: integer
+            format: int32
       responses:
-        '204':
-          description: Director deleted successfully
-        '404':
+        404:
           description: Director not found
-
+        204:
+          description: Director deleted successfully
+  /contents/{contentId}:
+    get:
+      tags:
+        - contents
+      summary: Get content details
+      description: Get detailed information about a specific content
+      operationId: getContentById
+      parameters:
+        - name: contentId
+          in: path
+          description: The ID of the content to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Content details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+        404:
+          description: Content not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+    put:
+      tags:
+        - contents
+      summary: Update content
+      description: Update information about specific content
+      operationId: updateContent
+      parameters:
+        - name: contentId
+          in: path
+          description: The ID of the content to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Content'
+        required: true
+      responses:
+        404:
+          description: Content not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Content'
+        200:
+          description: Content updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+    delete:
+      tags:
+        - contents
+      summary: Delete content
+      description: Delete content by its ID
+      operationId: deleteContent
+      parameters:
+        - name: contentId
+          in: path
+          description: The ID of the content to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        404:
+          description: Content not found
+        204:
+          description: Content deleted successfully
+  /actors/{actorId}:
+    get:
+      tags:
+        - actors
+      summary: Get actor details
+      description: Get detailed information about a specific actor
+      operationId: getActorById
+      parameters:
+        - name: actorId
+          in: path
+          description: The ID of the actor to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        404:
+          description: Actor not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+        200:
+          description: Actor details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+    put:
+      tags:
+        - actors
+      summary: Update actor
+      description: Update information about a specific actor
+      operationId: updateActor
+      parameters:
+        - name: actorId
+          in: path
+          description: The ID of the actor to update
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actor'
+        required: true
+      responses:
+        200:
+          description: Actor updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+        404:
+          description: Actor not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Actor'
+    delete:
+      tags:
+        - actors
+      summary: Delete actor
+      description: Delete actor by its ID
+      operationId: deleteActor
+      parameters:
+        - name: actorId
+          in: path
+          description: The ID of the actor to delete
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        404:
+          description: Actor not found
+        204:
+          description: Actor deleted successfully
+  /directors:
+    get:
+      tags:
+        - directors
+      summary: Get a list of all directors
+      description: Retrieve a list of all directors available in the platform
+      operationId: getDirectors
+      responses:
+        200:
+          description: A list of directors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Director'
+    post:
+      tags:
+        - directors
+      summary: Add a new director
+      description: Add a new director to the platform
+      operationId: addDirector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Director'
+        required: true
+      responses:
+        201:
+          description: Director added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Director'
+  /contents:
+    get:
+      tags:
+        - contents
+      summary: Get a list of all contents
+      description: Retrieve a list of all contents available on the platform
+      operationId: getContents
+      responses:
+        200:
+          description: A list of contents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Content'
+    post:
+      tags:
+        - contents
+      summary: Add new content
+      description: Add new content to the platform
+      operationId: addContent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Content'
+        required: true
+      responses:
+        201:
+          description: Content added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+  /actors:
+    get:
+      tags:
+        - actors
+      summary: Get a list of all actors
+      description: Retrieve a list of all actors available in the platform
+      operationId: getActors
+      responses:
+        200:
+          description: A list of actors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Actor'
+    post:
+      tags:
+        - actors
+      summary: Add a new actor
+      description: Add a new actor to the platform
+      operationId: addActor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actor'
+        required: true
+      responses:
+        201:
+          description: Actor added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+  /contents/search:
+    get:
+      tags:
+        - contents
+      summary: Search contents by keyword
+      description: Search contents using a single keyword that matches title, synopsis,
+        actor names, or director names
+      operationId: searchContents
+      parameters:
+        - name: keyword
+          in: query
+          description: Keyword to search across title, synopsis, actor names, or director
+            names
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of contents matching the keyword
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Content'
+  /contents/genres:
+    get:
+      tags:
+        - contents
+      summary: Retrieve all available genres
+      description: Get a list of all genres available on the platform
+      operationId: getAllGenres
+      responses:
+        200:
+          description: A list of all available genres
+          content:
+            application/json: {}
+        204:
+          description: No genres found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /contents/filterByGenres:
+    get:
+      tags:
+        - contents
+      summary: Filter contents by genres
+      description: Retrieve contents filtered by one or more genres
+      operationId: filterContentsByGenres
+      parameters:
+        - name: genres
+          in: query
+          description: List of genres to filter by
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        204:
+          description: No content found for the specified genres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Content'
+        200:
+          description: A list of contents matching the genres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Content'
 components:
   schemas:
-    Content:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the content
-        type:
-          type: string
-          enum:
-            - movie
-            - series
-            - episode
-            - documentary
-          description: Type of the content (e.g., movie, series, episode, documentary)
-        title:
-          type: string
-          description: Title of the content
-        synopsis:
-          type: string
-          description: A short synopsis of the content
-        parentSeriesId:
-          type: integer
-          description: ID of the parent series if the content is an episode
-        releaseYear:
-          type: integer
-          description: Year of release
-        duration:
-          type: integer
-          description: Duration in minutes
-        coverImage:
-          type: string
-          description: URL of the cover image for the content
-        genre:
-          type: string
-          enum:
-            - Action
-            - Comedy
-            - Drama
-            - Horror
-            - Thriller
-            - Romance
-            - Sci-Fi
-            - Fantasy
-            - Documentary
-            - Animation
-          description: Genre associated with the content
-        languages:
-          type: array
-          items:
-            type: string
-            enum:
-              - English
-              - Spanish
-              - French
-              - Mandarin
-              - Arabic
-              - Hindi
-              - Russian
-              - Portuguese
-          description: List of languages available for the content
-        actors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Actor'
-          description: List of actors associated with the content
-        directors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Director'
-          description: List of directors associated with the content
-
-    Actor:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the actor
-        name:
-          type: string
-          description: Name of the actor
-        biography:
-          type: string
-          description: Biography of the actor
-        birthDate:
-          type: string
-          format: date
-          description: Date of birth of the actor
-
     Director:
       type: object
       properties:
         id:
           type: integer
           description: Unique identifier for the director
+          format: int32
+          readOnly: true
         name:
           type: string
           description: Name of the director
         biography:
           type: string
           description: Biography of the director
-        birthDate:
+    Content:
+      required:
+        - duration
+        - genre
+        - releaseYear
+        - title
+        - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+        type:
           type: string
-          format: date
-          description: Date of birth of the director
+        title:
+          type: string
+        synopsis:
+          type: string
+        parentSeriesId:
+          type: integer
+          format: int32
+        releaseYear:
+          maximum: 2100
+          minimum: 1900
+          type: integer
+          format: int32
+        duration:
+          minimum: 1
+          type: integer
+          format: int32
+        coverImage:
+          type: string
+        genre:
+          type: string
+        actorIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        directorIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        language:
+          type: string
+        status:
+          type: string
+    Actor:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the actor
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          description: Name of the actor
+        biography:
+          type: string
+          description: Biography of the actor

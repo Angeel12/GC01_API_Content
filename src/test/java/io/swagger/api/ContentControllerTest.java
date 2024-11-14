@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.Content;
@@ -264,6 +265,27 @@ public class ContentControllerTest {
                 .andExpect(jsonPath("$.status").value("private")); // Verificamos que el estado fue actualizado correctamente
     }
 
+    @Test
+    public void testSearchContents() throws Exception {
+        // Utilizamos el contenido existente del setUp() para la búsqueda simulada
+        String keyword = "Inception"; // Palabra clave a buscar
+        List<Content> searchResults = mockContents.stream()
+                .filter(content -> content.getTitle().contains(keyword) || content.getSynopsis().contains(keyword))
+                .collect(Collectors.toList());
+
+        // Configuramos el servicio para devolver los resultados simulados de la búsqueda
+        when(contentService. searchContentByKeyword(keyword)).thenReturn(searchResults);
+
+        // Realizamos la prueba del endpoint de búsqueda con la palabra clave "Inception"
+        mockMvc.perform(get("/contents/search")
+                        .param("keyword", keyword)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()) // Verificamos que se devuelve el código 200 OK
+                .andExpect(jsonPath("$.length()").value(1)) // Verificamos que la respuesta contiene 1 elemento (Inception)
+                .andExpect(jsonPath("$[0].id").value(1)) // Verificamos los campos del contenido devuelto
+                .andExpect(jsonPath("$[0].title").value("Inception"))
+                .andExpect(jsonPath("$[0].synopsis").value("A mind-bending thriller"));
+    }
 
 
 
