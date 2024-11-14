@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import io.swagger.model.Content;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,24 +30,26 @@ public class ContentControllerTest {
     private ContentService contentService;
 
     private List<Content> mockContents;
+    private Content mockContent; // Definición de la variable de clase
 
     @BeforeEach
     public void setUp() {
-        // Instanciamos y configuramos objetos Content usando setters
-        Content content1 = new Content();
-        content1.setId(1);
-        content1.setType("movie");
-        content1.setTitle("Inception");
-        content1.setSynopsis("A mind-bending thriller");
-        content1.setReleaseYear(2010);
-        content1.setDuration(148);
-        content1.setCoverImage("inception.jpg");
-        content1.setGenre("action");
-        content1.setActorIds(Arrays.asList(101, 102));
-        content1.setDirectorIds(Arrays.asList(201));
-        content1.setLanguage("English");
-        content1.setStatus("public");
+        // Instancia y configuración del objeto mockContent
+        mockContent = new Content();
+        mockContent.setId(1);
+        mockContent.setType("movie");
+        mockContent.setTitle("Inception");
+        mockContent.setSynopsis("A mind-bending thriller");
+        mockContent.setReleaseYear(2010);
+        mockContent.setDuration(148);
+        mockContent.setCoverImage("inception.jpg");
+        mockContent.setGenre("action");
+        mockContent.setActorIds(Arrays.asList(101, 102));
+        mockContent.setDirectorIds(Arrays.asList(201));
+        mockContent.setLanguage("English");
+        mockContent.setStatus("public");
 
+        // Configuración de otros contenidos para listas
         Content content2 = new Content();
         content2.setId(2);
         content2.setType("series");
@@ -74,7 +77,7 @@ public class ContentControllerTest {
         content3.setStatus("public");
 
         // Configuramos la lista simulada de contenidos
-        mockContents = Arrays.asList(content1, content2, content3);
+        mockContents = Arrays.asList(mockContent, content2, content3);
     }
 
     @Test
@@ -95,5 +98,32 @@ public class ContentControllerTest {
                 .andExpect(jsonPath("$[0].status").value("public"))
                 .andExpect(jsonPath("$[1].title").value("Breaking Bad"))
                 .andExpect(jsonPath("$[2].title").value("Planet Earth"));
+    }
+
+    @Test
+    public void testGetContentById() throws Exception {
+        // Configura el comportamiento simulado para obtener un contenido por ID
+        when(contentService.getContentById(1)).thenReturn(Optional.of(mockContent));
+
+        // Prueba el endpoint para obtener contenido por ID
+        mockMvc.perform(get("/contents/1")) // Asegúrate de que la URL sea coherente
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.type").value("movie"))
+                .andExpect(jsonPath("$.title").value("Inception"))
+                .andExpect(jsonPath("$.releaseYear").value(2010))
+                .andExpect(jsonPath("$.duration").value(148))
+                .andExpect(jsonPath("$.genre").value("action"))
+                .andExpect(jsonPath("$.status").value("public"));
+    }
+
+    @Test
+    public void testGetContentByIdNotFound() throws Exception {
+        // Configura el comportamiento simulado para un ID que no existe
+        when(contentService.getContentById(999)).thenReturn(Optional.empty());
+
+        // Prueba el endpoint para un contenido que no existe
+        mockMvc.perform(get("/contents/999"))
+                .andExpect(status().isNotFound());
     }
 }
