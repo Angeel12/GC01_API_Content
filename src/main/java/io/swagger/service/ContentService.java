@@ -5,8 +5,10 @@ import io.swagger.repository.ContentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ContentService {
@@ -32,6 +34,15 @@ public class ContentService {
 
     public List<Content> searchContentByKeyword(String keyword) {
         return contentRepository.searchByKeyword(keyword);
+    }
+
+    public List<Content> getContentsByGenres(List<String> genres) {
+        return contentRepository.findByGenres(genres);
+    }
+
+    public List<String> getAllGenres() {
+            return Content.getAllGenres();
+
     }
 
 
