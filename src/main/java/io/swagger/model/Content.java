@@ -146,7 +146,7 @@ public class Content {
   public static List<String> getAllGenres() {
     List<String> genres = new ArrayList<>();
     for (Content.GenreType genre : Content.GenreType.values()) {
-      genres.add(genre.name());
+      genres.add(genre.valueGenre);
     }
     return genres;
   }
