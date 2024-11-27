@@ -114,16 +114,16 @@ public class Content {
   }
 
   public enum GenreType {
-    action("action"),
-    comedy("comedy"),
-    drama("drama"),
-    horror("horror"),
-    thriller("thriller"),
-    romance("romance"),
-    sci_fi("sci-fi"),
-    fantasy("fantasy"),
-    documentary("documentary"),
-    animation("animation");
+    ACTION("action"),
+    COMEDY("comedy"),
+    DRAMA("drama"),
+    HORROR("horror"),
+    THRILLER("thriller"),
+    ROMANCE("romance"),
+    SCI_FI("sci-fi"),
+    FANTASY("fantasy"),
+    DOCUMENTARY("documentary"),
+    ANIMATION("animation");
 
     private final String valueGenre;
 

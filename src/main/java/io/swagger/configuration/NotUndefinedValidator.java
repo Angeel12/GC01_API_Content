@@ -9,7 +9,10 @@ public class NotUndefinedValidator implements ConstraintValidator<NotUndefined, 
 
         @Override
         public void initialize(NotUndefined constraintAnnotation) {
+            // This method is intentionally left empty because
+            // the NotUndefined constraint does not require any specific initialization logic.
         }
+
 
         @Override
         public boolean isValid(Object addressInformation, ConstraintValidatorContext context) {
