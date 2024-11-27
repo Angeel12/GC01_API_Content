@@ -117,7 +117,7 @@ public class CustomInstantDeserializer<T extends Temporal>
 
   protected final transient Function<TemporalAccessor, T> parsedToValue;
 
-  protected final BiFunction<T, ZoneId, T> adjust;
+  protected final transient BiFunction<T, ZoneId, T> adjust;
 
   protected CustomInstantDeserializer(Class<T> supportedType,
                     DateTimeFormatter parser,
@@ -164,18 +164,18 @@ public class CustomInstantDeserializer<T extends Temporal>
         long seconds = value.longValue();
         int nanoseconds = DecimalUtils.extractNanosecondDecimal(value, seconds);
         return fromNanoseconds.apply(new FromDecimalArguments(
-            seconds, nanoseconds, getZone(context)));
+                seconds, nanoseconds, getZone(context)));
       }
 
       case JsonTokenId.ID_NUMBER_INT: {
         long timestamp = parser.getLongValue();
         if (context.isEnabled(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)) {
           return this.fromNanoseconds.apply(new FromDecimalArguments(
-              timestamp, 0, this.getZone(context)
+                  timestamp, 0, this.getZone(context)
           ));
         }
         return this.fromMilliseconds.apply(new FromIntegerArguments(
-            timestamp, this.getZone(context)
+                timestamp, this.getZone(context)
         ));
       }
 
@@ -199,8 +199,11 @@ public class CustomInstantDeserializer<T extends Temporal>
         }
         return value;
       }
+
+      default:
+        throw context.mappingException("Expected type float, integer, or string.");
     }
-    throw context.mappingException("Expected type float, integer, or string.");
+
   }
 
   private ZoneId getZone(DeserializationContext context) {
